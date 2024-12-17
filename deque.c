@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 typedef struct deque{
+	struct deque *head;
 	int data;
 	struct deque *next;
 	struct deque *pre;
@@ -10,6 +11,7 @@ typedef struct deque{
 deque *deque_init(int data){
 	deque *q = malloc(sizeof(deque));
 
+	q->head = q;
 	q->data = data;
 	q->next = NULL;
 	q->pre = NULL;
@@ -40,20 +42,32 @@ void deque_push_left(deque *q, int data){
 	q->pre = node;
 }
 
+deque *deque_pop_left(deque *q){
+	deque *node = malloc(sizeof(deque));
+	node = q;
+	q->next->pre = NULL;
+	return node;
+}
+
+void print_deque(deque *q){
+    deque *current = q->head;
+    while (current != NULL) {
+        printf("data: %d\n", current->data);
+        current = current->next;
+    }
+
+}
+
 int main() {
 	deque *q = deque_init(25);
+	print_deque(q);
+
 	deque_push_right(q, 69);
+	print_deque(q);
 	deque_push_left(q, 687438);
+	print_deque(q);
 
-	//TODO use do-while?
-	while (q->next != NULL){
-	printf("data: %d\n", q->data);
-		q = q->next;
-	}
-
-	while (q != NULL) {
-	printf("data: %d\n", q->data);
-		q = q->pre;
-	}
+	deque_pop_left(q);
+	print_deque(q);
 }
 
