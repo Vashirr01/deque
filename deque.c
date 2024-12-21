@@ -9,6 +9,7 @@ typedef struct deque{
 } deque;
 
 deque *deque_init(int data){
+	printf("Init\n");
 	deque *q = malloc(sizeof(deque));
 
 	q->data = data;
@@ -19,6 +20,7 @@ deque *deque_init(int data){
 }
 
 void deque_push_right(deque *q, int data){
+	printf("Push right: %d\n", data);
 	deque *node = malloc(sizeof(deque));
 	node->data = data;
 	node->next = NULL;
@@ -32,6 +34,7 @@ void deque_push_right(deque *q, int data){
 }
 
 void deque_push_left(deque **q, int data){
+	printf("Push left: %d\n", data);
 	deque *node = malloc(sizeof(deque));
 	node->data = data;
 	node->next = *q;
@@ -44,6 +47,7 @@ void deque_push_left(deque **q, int data){
 }
 
 deque *deque_pop_left(deque **q){
+	printf("Pop left\n");
 	deque *node = *q;
 	*q = (*q)->next;
 
@@ -56,6 +60,7 @@ deque *deque_pop_left(deque **q){
 }
 
 deque *deque_pop_right(deque *q){
+	printf("Pop right\n");
 	while (q->next != NULL) {
 		q = q->next;
 	}
@@ -67,30 +72,47 @@ deque *deque_pop_right(deque *q){
 	return node;
 }
 
-void print_deque(deque *q){
+void print_deque(deque *q) {
+    printf("\n");
+    if (q == NULL) {
+        printf("[EMPTY]\n");
+        return;
+    }
+
     deque *current = q;
     while (current != NULL) {
-        printf("data: %d\n", current->data);
+        printf("%d", current->data);
+        if (current->next != NULL) {
+            printf(" <--> ");
+        }
         current = current->next;
     }
-        printf("------\n");
-
+    printf("\n\n");
 }
 
 int main() {
-	deque *q = deque_init(25);
-	print_deque(q);
-
-	deque_push_right(q, 69);
-	print_deque(q);
-	deque_push_left(&q, 687438);
-	print_deque(q);
-
-	deque *n = deque_pop_left(&q);
-	printf("popped node data: %d\n", n->data);
-	print_deque(q);
-	n = deque_pop_right(q);
-	printf("popped node data: %d\n", n->data);
-	print_deque(q);
+   deque *q = deque_init(25);
+   print_deque(q);
+   deque_push_left(&q, 687438);
+   print_deque(q);
+   deque_push_right(q, 100);
+   print_deque(q);
+   deque_push_left(&q, 42); 
+   print_deque(q);
+   deque_pop_right(q);
+   print_deque(q);
+   deque_push_right(q, 555);
+   print_deque(q);
+   deque_pop_left(&q);
+   print_deque(q);
+   deque_pop_right(q);
+   print_deque(q);
+   deque_push_left(&q, 777);
+   print_deque(q);
+   deque_push_right(q, 999);
+   print_deque(q);
+   deque_pop_left(&q);
+   print_deque(q);
+   return 0;
 }
 
