@@ -23,7 +23,6 @@ void deque_push_right(deque *q, int data){
 	node->data = data;
 	node->next = NULL;
 
-	//TODO fix check to q != NULL
 	while (q->next != NULL) {
 		q = q->next;
 	}
@@ -56,6 +55,18 @@ deque *deque_pop_left(deque **q){
 	return node;
 }
 
+deque *deque_pop_right(deque *q){
+	while (q->next != NULL) {
+		q = q->next;
+	}
+	if(q->pre != NULL){
+		q->pre->next = NULL;
+		q->pre = NULL;
+	}
+	deque *node = q;
+	return node;
+}
+
 void print_deque(deque *q){
     deque *current = q;
     while (current != NULL) {
@@ -75,7 +86,11 @@ int main() {
 	deque_push_left(&q, 687438);
 	print_deque(q);
 
-	deque_pop_left(&q);
+	deque *n = deque_pop_left(&q);
+	printf("popped node data: %d\n", n->data);
+	print_deque(q);
+	n = deque_pop_right(q);
+	printf("popped node data: %d\n", n->data);
 	print_deque(q);
 }
 
