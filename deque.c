@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct deque{
-	struct deque *head;
 	int data;
 	struct deque *next;
 	struct deque *pre;
@@ -11,7 +11,6 @@ typedef struct deque{
 deque *deque_init(int data){
 	deque *q = malloc(sizeof(deque));
 
-	q->head = q;
 	q->data = data;
 	q->next = NULL;
 	q->pre = NULL;
@@ -33,28 +32,37 @@ void deque_push_right(deque *q, int data){
 	q->next->pre = q;
 }
 
-void deque_push_left(deque *q, int data){
+void deque_push_left(deque **q, int data){
 	deque *node = malloc(sizeof(deque));
 	node->data = data;
-	node->next = q;
+	node->next = *q;
 	node->pre = NULL;
 
-	q->pre = node;
+	if(*q != NULL){
+	(*q)->pre = node;
+	}
+	(*q) = node;
 }
 
-deque *deque_pop_left(deque *q){
-	deque *node = malloc(sizeof(deque));
-	node = q;
-	q->next->pre = NULL;
+deque *deque_pop_left(deque **q){
+	deque *node = *q;
+	*q = (*q)->next;
+
+	if (*q != NULL) {
+		(*q)->pre = NULL;
+	}
+
+	node->next = NULL;
 	return node;
 }
 
 void print_deque(deque *q){
-    deque *current = q->head;
+    deque *current = q;
     while (current != NULL) {
         printf("data: %d\n", current->data);
         current = current->next;
     }
+        printf("------\n");
 
 }
 
@@ -64,10 +72,10 @@ int main() {
 
 	deque_push_right(q, 69);
 	print_deque(q);
-	deque_push_left(q, 687438);
+	deque_push_left(&q, 687438);
 	print_deque(q);
 
-	deque_pop_left(q);
+	deque_pop_left(&q);
 	print_deque(q);
 }
 
